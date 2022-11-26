@@ -4,7 +4,10 @@ from torch.utils.data import DataLoader
 from A1.celeba_dataset import CelebaDataSet
 from A1.model_a1 import ModelA1
 from A2.model_a2 import Model_A2
-from A2.lab2_lamdmarks import extract_features_labels
+from A2.lab2_lamdmarks import prepare_celeba_feature_labels
+from B1.model_b1 import Model_B1  
+from B1.data_process import prepare_cartoon_data
+  
 from torch.utils.data import random_split
 from sklearn.metrics import accuracy_score, f1_score
 from tqdm import tqdm
@@ -80,24 +83,30 @@ def train_A1():
     
 def train_A2():
     print('#################### Run task A2 ###################')
-    train_x, train_y =  extract_features_labels(config.CELEBA_IMG, config.CELEBA_LABELS, img_name_colunms=1, labels_colunms=3)
-    test_x, test_y = extract_features_labels(config.CELEBA_IMG_TEST, config.CELEBA_TEST_LABELS, img_name_colunms=1, labels_colunms=3)
+    train_x, train_y =  prepare_celeba_feature_labels(config.CELEBA_IMG, config.CELEBA_LABELS, img_name_colunms=1, labels_colunms=3)
+    test_x, test_y = prepare_celeba_feature_labels(config.CELEBA_IMG_TEST, config.CELEBA_TEST_LABELS, img_name_colunms=1, labels_colunms=3)
     
     model = Model_A2()
     # print(train_x)
     print('start training.....')
-    acc, f1, roc_data, cm = model.train(train_x, train_y)
+    model.train(train_x, train_y)
     print('end training.....')
-    print('####### training results ##########')
-    print('1.train acc:{}\n2.rain f1:{}\n3.confusion matrix: tn [{}], fp [{}], fn [{}], tp [{}]'.format(acc, f1, cm[0], cm[1], cm[2], cm[3]))
     acc, f1, roc_data, cm = model.test(test_x, test_y)
     print('####### testing results ##########')
     print('1.test acc:{}\n2.test f1:{}\n3.confusion matrix: tn [{}], fp [{}], fn [{}], tp [{}]'.format(acc, f1, cm[0], cm[1], cm[2], cm[3]))
-    pass
 
 def train_B1():
     print('#################### Run task B1 ###################')
-    pass
+    train_x, train_y =  prepare_cartoon_data(config.CARTOON_IMG, config.CARTOON_LABELS, img_name_colunms=3, labels_colunms=2)
+    test_x, test_y = prepare_cartoon_data(config.CARTOON_IMG_TEST, config.CARTOON_TEST_LABELS, img_name_colunms=3, labels_colunms=2)
+    print('start training.....')
+    model = Model_B1()
+    model.train(train_x, train_y)
+    print('end training.....')
+    print('####### testing results ##########')
+    acc, p_class, r_class, f_class = model.test(test_x, test_y)
+    print('1.test acc:{}\n2.test f1:{}'.format(acc, f_class))
+    
 
 def train_B2():
     print('#################### Run task B2 ###################')
