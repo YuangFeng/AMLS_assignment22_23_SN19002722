@@ -84,7 +84,7 @@ def run_dlib_shape(image):
 
 
 
-def extract_features_labels(images_dir, labels_path, img_name_colunms, labels_colunms):
+def prepare_celeba_feature_labels(images_dir, labels_path, img_name_colunms, labels_colunms):
     
     # load labels
     labels_file = open(labels_path, 'r')
