@@ -3,6 +3,7 @@ from sklearn import svm
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import accuracy_score, f1_score, roc_curve, confusion_matrix, auc
 from matplotlib import pyplot as plt
+from sklearn.model_selection import cross_val_score
 
 class Model_A2:
     def __init__(self, search=False) -> None:
@@ -20,9 +21,10 @@ class Model_A2:
             print('best score:',self.clf.best_score_)
             print('best parameters:', self.clf.best_params_)
         else:
-            self.model = self.model.fit(x,y)
-        return self.test(x,y)
-    
+            # scores = cross_val_score(self.model, x, y, cv = 10, scoring = 'f1')
+            # print('k-fold scores:', scores)
+            self.model = self.model.fit(x, y)
+            
     def test(self, x, y):
         pred = self.model.predict(x)
         pred_score = self.model.predict_proba(x)[:,1]
