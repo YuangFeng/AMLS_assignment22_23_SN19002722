@@ -7,6 +7,18 @@ def get_features(img):
     
     return None
 def prepare_cartoon_data(images_dir, labels_path, img_name_colunms, labels_colunms, img_size = 50):
+    """
+    Read and preproces the images
+    Input parameters:
+        images_dir: The local path of image set
+        labels_path: The local path of label file
+        img_name_colunms: The coulumn index of image names in label file(csv format)
+        labels_columns: The coulumn index of labels in label file(csv format)
+        img_size: The target size of images after pre-processing
+    Returns:
+        all_imags: Images after pre-processing
+        all_labels: labels of images
+    """
     labels_file = open(labels_path, 'r')
     lines = labels_file.readlines()
     image_label = {line.split('\t')[img_name_colunms].rstrip() : int(line.split('\t')[labels_colunms]) for line in lines[1:]}
@@ -21,8 +33,8 @@ def prepare_cartoon_data(images_dir, labels_path, img_name_colunms, labels_colun
         i += 1
         if i> 100:
             break
-        img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
-        img = cv2.resize(src=img, dsize=(img_size, img_size),  interpolation=cv2.INTER_LANCZOS4)
+        img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)#Change to grey images
+        img = cv2.resize(src=img, dsize=(img_size, img_size),  interpolation=cv2.INTER_LANCZOS4)##resize the images
         img_name = image_path.split('/')[-1]
         # features = get_features(img)
         # if features is not None:
