@@ -6,6 +6,11 @@ from matplotlib import pyplot as plt
 from sklearn.model_selection import cross_val_score
 
 class Model_A2:
+    """
+    The model of task A2, the default model is svm. one can choose to use gridsearch to find the hyperparameters of model.
+    parameters: 
+        search: bool, whether to use grid search, default:False
+    """
     def __init__(self, search=False) -> None:
         self.search = search
         self.model = svm.SVC(C=10000, gamma=2.6826957952797274e-06, probability=True)
@@ -16,6 +21,15 @@ class Model_A2:
         
     
     def train(self, x, y):
+        """
+        Trian model according to given training data
+        Input parameters:
+            x:Tensor, features of images
+            y:Tensor, labels of images
+        
+        Return:
+            None
+        """
         if self.search:
             self.model = self.clf.fit(x,y)
             print('best score:',self.clf.best_score_)
@@ -26,6 +40,18 @@ class Model_A2:
             self.model = self.model.fit(x, y)
             
     def test(self, x, y):
+        """
+        Test model with given test data
+        Input parameters:
+            x:Tensor, features of images
+            y:Tensor, labels of images
+        
+        Return:
+            acc: accuracy of model
+            f1: F1-score of model
+            roc: roc curve of model, (fpr, tpr, thersholds)
+            cm: confusion matrix of model
+        """
         pred = self.model.predict(x)
         pred_score = self.model.predict_proba(x)[:,1]
         acc = accuracy_score(y, pred)
@@ -36,14 +62,18 @@ class Model_A2:
         return acc, f1, roc, cm
     
     def plot_roc(self, roc):
+        """
+        Plot and save the ROC curve
+        Input parameters: 
+            roc: fpr, tpr, thersholds
+        """
         fpr, tpr, thersholds = roc
         roc_auc = auc(fpr, tpr)
-        plt.plot(fpr, tpr, 'k--', label='ROC (area = {0:.2f})'.format(roc_auc), lw=2)
-        
-        plt.xlim([-0.05, 1.05])  # 设置x、y轴的上下限，以免和边缘重合，更好的观察图像的整体
+        plt.plot(fpr, tpr, 'k--', label='ROC (area = {0:.2f})'.format(roc_auc), lw=2)       
+        plt.xlim([-0.05, 1.05])  # Set the limit of x label and y label to observe the graph properly
         plt.ylim([-0.05, 1.05])
         plt.xlabel('False Positive Rate')
-        plt.ylabel('True Positive Rate')  # 可以使用中文，但需要导入一些库即字体
+        plt.ylabel('True Positive Rate')
         plt.title('ROC Curve')
         plt.legend(loc="lower right")
         plt.savefig('A2_ROC.jpg')
