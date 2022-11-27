@@ -45,7 +45,7 @@ class CelebaDataSet(Dataset):
         """
         Get single image
         Input parameters:
-            index: Int, the image index one wants to locate
+            index: Int, the image index one wants to get
         Returns:
             image: RGB image
             label: label of image
