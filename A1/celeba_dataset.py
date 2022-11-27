@@ -13,13 +13,16 @@ class CelebaDataSet(Dataset):
         
         self.iamges, self.labels = self.load_data(file_path)
         self.transforms = transforms.Compose([
-            transforms.Resize((64, 64)),
+            transforms.Resize((64, 64)),#Resize to 64*64
             transforms.ToTensor(),
-            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])#RGB Normalizatiom
             # transforms.Normalize(mean = [0.485, 0.456, 0.406], std = [0.229, 0.224, 0.225]),
         ])
     
     def load_data(self, file_path):
+        '''
+        load labels of images
+        '''
         data = pd.read_csv(file_path, header='infer', sep="\t", usecols=[1,2,3])
         labels = dict()
         images = []
