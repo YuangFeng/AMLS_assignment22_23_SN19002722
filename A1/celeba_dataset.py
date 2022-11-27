@@ -6,6 +6,11 @@ import pandas as pd
 from os import path
 
 class CelebaDataSet(Dataset):
+    """
+    CelebA dataset
+    imag_path:String, the local path of image directory
+    file_path:String, the local path of label file
+    """
     def __init__(self, imag_path, file_path):
         super().__init__()
         self.imag_path = imag_path
@@ -20,9 +25,14 @@ class CelebaDataSet(Dataset):
         ])
     
     def load_data(self, file_path):
-        '''
+        """
         load labels of images
-        '''
+        Input parameters:
+            file_path: String, the local path of label file
+        Returns:
+            images:The list of image names
+            labels:The list of image labels
+        """
         data = pd.read_csv(file_path, header='infer', sep="\t", usecols=[1,2,3])
         labels = dict()
         images = []
