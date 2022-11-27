@@ -66,6 +66,8 @@ class Model_A2:
         Plot and save the ROC curve
         Input parameters: 
             roc: fpr, tpr, thersholds
+        Output parameters:
+            None
         """
         fpr, tpr, thersholds = roc
         roc_auc = auc(fpr, tpr)
