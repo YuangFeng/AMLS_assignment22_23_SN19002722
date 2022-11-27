@@ -12,8 +12,6 @@ class Model_B1:
     
     def test(self, x, y):
         pred = self.model.predict(x)
-        print(pred)
-        print(y)
         acc = accuracy_score(y, pred)
         p_class, r_class, f_class, support_micro = precision_recall_fscore_support(y, pred)
         return  acc, p_class, r_class, f_class
