@@ -8,7 +8,7 @@ from os import path
 class CelebaDataSet(Dataset):
     """
     CelebA dataset
-    imag_path:String, the local path of image directory
+    imag_path:String, the local path of image set
     file_path:String, the local path of label file
     """
     def __init__(self, imag_path, file_path):
@@ -42,6 +42,14 @@ class CelebaDataSet(Dataset):
         return images, labels
     
     def __getitem__(self, index):
+        """
+        Get single image
+        Input parameters:
+            index: Int, the image index one wants to locate
+        Returns:
+            image: RGB image
+            label: label of image
+        """
         image_name = self.iamges[index]
         label1 = self.labels[image_name]
         img = Image.open( path.join(self.imag_path, image_name)).convert("RGB")
@@ -49,4 +57,7 @@ class CelebaDataSet(Dataset):
         return img, torch.tensor(label1, dtype=torch.float)
     
     def __len__(self):
+        """
+        Return length of images
+        """
         return len(self.iamges)    
