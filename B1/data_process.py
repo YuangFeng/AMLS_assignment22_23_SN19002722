@@ -19,8 +19,8 @@ def prepare_cartoon_data(images_dir, labels_path, img_name_colunms, labels_colun
     i = 0
     for image_path in tqdm(image_paths):
         i += 1
-        # if i> 100:
-        #     break
+        if i> 100:
+            break
         img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
         img = cv2.resize(src=img, dsize=(img_size, img_size),  interpolation=cv2.INTER_LANCZOS4)
         img_name = image_path.split('/')[-1]

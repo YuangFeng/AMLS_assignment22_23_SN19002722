@@ -6,7 +6,9 @@ from A1.model_a1 import ModelA1
 from A2.model_a2 import Model_A2
 from A2.lab2_lamdmarks import prepare_celeba_feature_labels
 from B1.model_b1 import Model_B1  
+from B2.model_b2 import Model_B2  
 from B1.data_process import prepare_cartoon_data
+from B2.data_process import prepare_cartoon_data2
   
 from torch.utils.data import random_split
 from sklearn.metrics import accuracy_score, f1_score
@@ -110,4 +112,13 @@ def train_B1():
 
 def train_B2():
     print('#################### Run task B2 ###################')
+    train_x, train_y =  prepare_cartoon_data2(config.CARTOON_IMG, config.CARTOON_LABELS, img_name_colunms=3, labels_colunms=1)
+    test_x, test_y = prepare_cartoon_data2(config.CARTOON_IMG_TEST, config.CARTOON_TEST_LABELS, img_name_colunms=3, labels_colunms=1)
+    print('start training.....')
+    model = Model_B2()
+    model.train(train_x, train_y)
+    print('end training.....')
+    print('####### testing results ##########')
+    acc, p_class, r_class, f_class = model.test(test_x, test_y)
+    print('1.test acc:{}\n2.test f1:{}'.format(acc, f_class))
     pass
