@@ -23,8 +23,7 @@ def train_A1():
     train_length = int(len(data)*0.7)
     train_data, test_data = random_split(data, lengths=[train_length, len(data)-train_length], generator=torch.Generator().manual_seed(0))
     train_loader = DataLoader(train_data, batch_size=16,shuffle=True, num_workers=8)
-    
-    # device = torch.device("cuda:1") if torch.cuda.is_available() else torch.device("cpu")    
+      
     device = torch.device("cpu")
     test_loader = DataLoader(test_data, batch_size=1, shuffle=False, num_workers=3)
     model = ModelA1(num_classes = 1)
