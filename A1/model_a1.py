@@ -5,6 +5,7 @@ class ModelA1(nn.Module):
     def __init__(self, num_classes = 1) -> None:
         super().__init__()
         self.num_classes = num_classes
+        #CNN model
         self.layers = nn.Sequential(
             nn.Conv2d(3,64,3,padding=1),
             nn.BatchNorm2d(64),
@@ -18,6 +19,7 @@ class ModelA1(nn.Module):
             nn.BatchNorm2d(16),
             nn.ReLU(inplace=True),
         )
+        #linear layer
         self.linear = nn.Sequential(
             nn.Linear(16*16*16, 128),
             nn.ReLU(inplace=True),
@@ -26,7 +28,6 @@ class ModelA1(nn.Module):
         )
     def forward(self, x):
         x = self.layers(x)
-        print(x.shape)
         x = x.flatten(1)
         x = self.linear(x)
         return x
