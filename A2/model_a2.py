@@ -7,7 +7,7 @@ from sklearn.model_selection import cross_val_score
 
 class Model_A2:
     """
-    The model of task A2, the default model is svm. one can choose to use gridsearch to find the hyperparameters of model.
+    The model used in task A2 is svm. one can choose to use gridsearch to find the hyperparameters of model.
     parameters: 
         search: bool, whether to use grid search, default:False
     """
@@ -27,7 +27,7 @@ class Model_A2:
             x:Tensor, features of images
             y:Tensor, labels of images
         
-        Return:
+        Returns:
             None
         """
         if self.search:
@@ -46,7 +46,7 @@ class Model_A2:
             x:Tensor, features of images
             y:Tensor, labels of images
         
-        Return:
+        Returns:
             acc: accuracy of model
             f1: F1-score of model
             roc: roc curve of model, (fpr, tpr, thersholds)
