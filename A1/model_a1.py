@@ -27,7 +27,7 @@ class ModelA1(nn.Module):
             nn.Linear(16*16*16, 128),
             nn.ReLU(inplace=True),
             nn.Dropout(0.2),
-            nn.Linear(128, self.num_classes)
+            nn.Linear(128, self.num_classes)#Fully connected layer
         )
     def forward(self, x):
         """
