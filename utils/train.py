@@ -110,8 +110,8 @@ def train_B1():
 
 def train_B2():
     print('#################### Run task B2 ###################')
-    train_x, train_y =  prepare_cartoon_data2(config.CARTOON_IMG, config.CARTOON_LABELS, img_name_colunms=3, labels_colunms=1)
-    test_x, test_y = prepare_cartoon_data2(config.CARTOON_IMG_TEST, config.CARTOON_TEST_LABELS, img_name_colunms=3, labels_colunms=1)
+    train_x, train_y =  prepare_cartoon_data2(config.CARTOON_IMG, config.CARTOON_LABELS, img_name_colunms=3, labels_colunms=1, train=True)
+    test_x, test_y = prepare_cartoon_data2(config.CARTOON_IMG_TEST, config.CARTOON_TEST_LABELS, img_name_colunms=3, labels_colunms=1, train = True)
     print('start training.....')
     model = Model_B2()
     model.train(train_x, train_y)
