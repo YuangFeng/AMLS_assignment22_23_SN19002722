@@ -22,9 +22,8 @@ class ModelA1(nn.Module):
             nn.BatchNorm2d(16),
             nn.ReLU(inplace=True),
         )
-        #linear layer
         self.linear = nn.Sequential(
-            nn.Linear(16*16*16, 128),
+            nn.Linear(16*16*16, 128),#Fully connected layer
             nn.ReLU(inplace=True),
             nn.Dropout(0.2),
             nn.Linear(128, self.num_classes)#Fully connected layer
