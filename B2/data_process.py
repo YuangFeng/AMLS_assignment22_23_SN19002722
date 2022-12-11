@@ -3,9 +3,10 @@ import os
 import cv2
 import dlib
 from tqdm import tqdm
+from A2.lab2_lamdmarks import rect_to_bb
 
 detector = dlib.get_frontal_face_detector()
-predictor = dlib.shape_predictor('B2/shape_predictor_68_face_landmarks.dat')
+predictor = dlib.shape_predictor('A2/shape_predictor_68_face_landmarks.dat')
 def shape_to_np(shape, dtype="int"):
     # initialize the list of (x, y)-coordinates
     coords = np.zeros((shape.num_parts, 2), dtype=dtype)
@@ -54,10 +55,10 @@ def run_dlib_shape(image):
 
     return dlibout
 
-def prepare_cartoon_data2(images_dir, labels_path, img_name_colunms, labels_colunms, img_size = 50, train=True):
+def prepare_cartoon_data2(images_dir, labels_path, img_name_columns, labels_columns, img_size = 50, train=True):
     labels_file = open(labels_path, 'r')
     lines = labels_file.readlines()
-    image_label = {line.split('\t')[img_name_colunms].rstrip() : int(line.split('\t')[labels_colunms]) for line in lines[1:]}
+    image_label = {line.split('\t')[img_name_columns].rstrip() : int(line.split('\t')[labels_columns]) for line in lines[1:]}
     # get all image paths
     image_paths = [os.path.join(images_dir, l) for l in os.listdir(images_dir)]
     
@@ -75,7 +76,7 @@ def prepare_cartoon_data2(images_dir, labels_path, img_name_colunms, labels_colu
             mean = hsv[:, :, 2].mean()
             if mean > 50:
                 without_glasses_image.append(image_path)
-        print('totoal image without glasses: {} total:{} rate:{}'.format(len(without_glasses_image), len(image_paths), len(without_glasses_image)/len(image_paths)))
+        print('total image without glasses: {} total:{} rate:{}'.format(len(without_glasses_image), len(image_paths), len(without_glasses_image)/len(image_paths)))
         image_paths = without_glasses_image
         
     all_imgs = []

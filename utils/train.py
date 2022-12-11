@@ -83,8 +83,8 @@ def train_A1():
     
 def train_A2():
     print('#################### Run task A2 ###################')
-    train_x, train_y =  prepare_celeba_feature_labels(config.CELEBA_IMG, config.CELEBA_LABELS, img_name_colunms=1, labels_colunms=3)
-    test_x, test_y = prepare_celeba_feature_labels(config.CELEBA_IMG_TEST, config.CELEBA_TEST_LABELS, img_name_colunms=1, labels_colunms=3)
+    train_x, train_y =  prepare_celeba_feature_labels(config.CELEBA_IMG, config.CELEBA_LABELS, img_name_columns=1, labels_columns=3)
+    test_x, test_y = prepare_celeba_feature_labels(config.CELEBA_IMG_TEST, config.CELEBA_TEST_LABELS, img_name_columns=1, labels_columns=3)
     
     model = Model_A2()
     # print(train_x)
@@ -97,8 +97,8 @@ def train_A2():
 
 def train_B1():
     print('#################### Run task B1 ###################')
-    train_x, train_y =  prepare_cartoon_data(config.CARTOON_IMG, config.CARTOON_LABELS, img_name_colunms=3, labels_colunms=2)
-    test_x, test_y = prepare_cartoon_data(config.CARTOON_IMG_TEST, config.CARTOON_TEST_LABELS, img_name_colunms=3, labels_colunms=2)
+    train_x, train_y =  prepare_cartoon_data(config.CARTOON_IMG, config.CARTOON_LABELS, img_name_columns=3, labels_columns=2)
+    test_x, test_y = prepare_cartoon_data(config.CARTOON_IMG_TEST, config.CARTOON_TEST_LABELS, img_name_columns=3, labels_columns=2)
     print('start training.....')
     model = Model_B1()
     model.train(train_x, train_y)
@@ -110,8 +110,8 @@ def train_B1():
 
 def train_B2():
     print('#################### Run task B2 ###################')
-    train_x, train_y =  prepare_cartoon_data2(config.CARTOON_IMG, config.CARTOON_LABELS, img_name_colunms=3, labels_colunms=1, train=True)
-    test_x, test_y = prepare_cartoon_data2(config.CARTOON_IMG_TEST, config.CARTOON_TEST_LABELS, img_name_colunms=3, labels_colunms=1, train = True)
+    train_x, train_y =  prepare_cartoon_data2(config.CARTOON_IMG, config.CARTOON_LABELS, img_name_columns=3, labels_columns=1, train=True)
+    test_x, test_y = prepare_cartoon_data2(config.CARTOON_IMG_TEST, config.CARTOON_TEST_LABELS, img_name_columns=3, labels_columns=1, train = True)
     print('start training.....')
     model = Model_B2()
     model.train(train_x, train_y)
@@ -119,4 +119,3 @@ def train_B2():
     print('####### testing results ##########')
     acc, p_class, r_class, f_class = model.test(test_x, test_y)
     print('1.test acc:{}\n2.test f1:{}'.format(acc, f_class))
-    pass
