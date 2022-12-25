@@ -22,6 +22,8 @@ from tqdm import tqdm
 #     300 faces In-the-wild challenge: Database and results.
 #     Image and Vision Computing (IMAVIS), Special Issue on Facial Landmark Localisation "In-The-Wild". 2016.
 
+detector = dlib.get_frontal_face_detector()
+predictor = dlib.shape_predictor('A2/shape_predictor_68_face_landmarks.dat')
 
 def shape_to_np(shape, dtype="int"):
     # initialize the list of (x, y)-coordinates

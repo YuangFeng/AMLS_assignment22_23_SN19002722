@@ -13,10 +13,10 @@ class Model_A2:
     """
     def __init__(self, search=False) -> None:
         self.search = search
-        self.model = svm.SVC(C=10000, gamma=2.6826957952797274e-06, probability=True)
+        self.model = svm.SVC(kernel = 'rbf', C=10000, probability=True)
         # self.model = RandomForestClassifier(n_estimators=10, n_jobs=-1)
         if self.search:
-            self.parameters = {'kernel':('rbf','linear'),'C':(1,2,3)}
+            self.parameters = {'kernel':('rbf','linear'),'C':(10000,20000,30000)}
             self.clf = GridSearchCV(svm.SVC(probability=True), self.parameters, scoring='f1', n_jobs=-1)
         
     
@@ -57,7 +57,7 @@ class Model_A2:
         acc = accuracy_score(y, pred)
         f1 = f1_score(y, pred)
         roc = roc_curve(y, pred_score, pos_label=1) #fpr, tpr, thersholds
-        cm = confusion_matrix(y, pred).ravel()
+        cm = confusion_matrix(y, pred)
         self.plot_roc(roc)
         return acc, f1, roc, cm
     
@@ -79,3 +79,4 @@ class Model_A2:
         plt.title('ROC Curve')
         plt.legend(loc="lower right")
         plt.savefig('A2_ROC.jpg')
+        plt.close()

@@ -14,8 +14,9 @@ from torch.utils.data import random_split
 from sklearn.metrics import accuracy_score, f1_score, confusion_matrix
 from tqdm import tqdm
 import config
-from torch.utils.tensorboard import SummaryWriter
+from tensorboardX import SummaryWriter
 import seaborn as sns
+import matplotlib.pyplot as plt
 
 
 
@@ -30,10 +31,9 @@ def evaluate(model, loader, device):
             pred = out.sigmoid().detach().cpu().numpy() >=0.5
             pred_list += list(pred)
             label_list += list(label)                
-            
         acc = accuracy_score(label_list, pred_list)
         f1 = f1_score(label_list, pred_list, zero_division=0)
-        cm = confusion_matrix(label_list, pred_list).ravel()
+        cm = confusion_matrix(label_list, pred_list)
         
     return acc, f1, cm
 
@@ -57,7 +57,7 @@ def train_A1():
     bce_loss = nn.BCEWithLogitsLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr = 1e-4)
     writer = SummaryWriter('./runs/A1/tensorboard')
-    num_epoch = 30
+    num_epoch = 40
     best_acc = 0.0
     for i in range(num_epoch):
         model.train()
@@ -77,29 +77,29 @@ def train_A1():
         writer.add_scalar("train/train_loss", total_loss/len(train_loader),i)
         
         acc, f1, cm = evaluate(model, val_loader, device)
-        fig = sns.heatmap(cm, annot=True, fmt='d',cmap = 'Blues')
-        heatmap = fig.get_figure()
-        heatmap.savefig('A1/heatmap_A1.png', dpi = 400)
-        if acc> best_acc:
-            best_acc = acc
-            torch.save(model, 'A1/best_model.pth')
-            model = torch.load('A1/best_model.pth')
-            print('save model at epoch {}'.format(i))
         print("epoch:{}\tval accuracy:{}\tval f1:{}".format(i,
                                             acc,
                                             f1
                                             ))
+        if acc> best_acc:
+            best_acc = acc
+            torch.save(model, 'A1/best_model.pth')
+            print('save model at epoch {}, best acc:{}'.format(i, best_acc))
+            
         writer.add_scalar("train/val_acc", acc,i)
         writer.add_scalar("train/val_F1", f1, i)
     writer.close()
     
     print('training finished!')
     model = torch.load('A1/best_model.pth')
-    acc, f1, cm = evaluate(model, val_loader, device)
+    acc, f1, cm = evaluate(model, test_loader, device)
     
     fig = sns.heatmap(cm, annot=True, fmt='d',cmap = 'Blues')
+    plt.ylabel('True Class')
+    plt.xlabel('Predicted Class')
     heatmap = fig.get_figure()
     heatmap.savefig('A1_heatmap', dpi = 400)
+    plt.close()
     
     cm = cm.ravel()
     print('####### testing results ##########')
@@ -107,17 +107,29 @@ def train_A1():
     
 def train_A2():
     print('#################### Run task A2 ###################')
-    train_x, train_y =  prepare_celeba_feature_labels(config.CELEBA_IMG, config.CELEBA_LABELS, img_name_columns=1, labels_columns=3)
-    test_x, test_y = prepare_celeba_feature_labels(config.CELEBA_IMG_TEST, config.CELEBA_TEST_LABELS, img_name_columns=1, labels_columns=3)
+    train_x, train_y =  prepare_celeba_feature_labels(config.CELEBA_IMG, config.CELEBA_LABELS, img_name_colunms=1, labels_colunms=3)
+    test_x, test_y = prepare_celeba_feature_labels(config.CELEBA_IMG_TEST, config.CELEBA_TEST_LABELS, img_name_colunms=1, labels_colunms=3)
     
+    print('train data:', len(train_x))
+    print('test_data:', len(test_x))
     model = Model_A2()
-    # print(train_x)
+    
     print('start training.....')
     model.train(train_x, train_y)
     print('end training.....')
     acc, f1, roc_data, cm = model.test(test_x, test_y)
+    
+    fig = sns.heatmap(cm, annot=True, fmt='d',cmap = 'Blues')
+    plt.ylabel('True Class')
+    plt.xlabel('Predicted Class')
+    heatmap = fig.get_figure()
+    heatmap.savefig('A2_heatmap', dpi = 400)
+    plt.close()
+    
+    cm = cm.ravel()
     print('####### testing results ##########')
     print('1.test acc:{}\n2.test f1:{}\n3.confusion matrix: tn [{}], fp [{}], fn [{}], tp [{}]'.format(acc, f1, cm[0], cm[1], cm[2], cm[3]))
+    
 
 def train_B1():
     print('#################### Run task B1 ###################')
