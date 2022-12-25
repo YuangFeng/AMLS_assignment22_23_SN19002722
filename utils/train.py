@@ -11,12 +11,13 @@ from B1.data_process import prepare_cartoon_data
 from B2.data_process import prepare_cartoon_data2
   
 from torch.utils.data import random_split
-from sklearn.metrics import accuracy_score, f1_score, confusion_matrix
+from sklearn.metrics import accuracy_score, f1_score, confusion_matrix, auc, roc_curve
 from tqdm import tqdm
 import config
 from tensorboardX import SummaryWriter
 import seaborn as sns
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 
@@ -29,14 +30,16 @@ def evaluate(model, loader, device):
             img = img.to(device)
             out = model(img)
             pred = out.sigmoid().detach().cpu().numpy() >=0.5
-            pred_list += list(pred)
-            label_list += list(label)                
+            pred_list += list(pred.astype(np.int16))
+            label_list += list(label.cpu().numpy().astype(np.int16))     
+        print(pred_list)           
         acc = accuracy_score(label_list, pred_list)
         f1 = f1_score(label_list, pred_list, zero_division=0)
         cm = confusion_matrix(label_list, pred_list)
-        
-    return acc, f1, cm
+        roc = roc_curve(label_list, pred_list, pos_label=1) #fpr, tpr, thersholds
+    return acc, f1, cm, roc
 
+        
 def train_A1():
     print('#################### Run task A1 ###################')
     data = CelebaDataSet(config.CELEBA_IMG, config.CELEBA_LABELS)
@@ -76,7 +79,7 @@ def train_A1():
                                             ))
         writer.add_scalar("train/train_loss", total_loss/len(train_loader),i)
         
-        acc, f1, cm = evaluate(model, val_loader, device)
+        acc, f1, cm, _ = evaluate(model, val_loader, device)
         print("epoch:{}\tval accuracy:{}\tval f1:{}".format(i,
                                             acc,
                                             f1
@@ -92,7 +95,7 @@ def train_A1():
     
     print('training finished!')
     model = torch.load('A1/best_model.pth')
-    acc, f1, cm = evaluate(model, test_loader, device)
+    acc, f1, cm, roc = evaluate(model, test_loader, device)
     
     fig = sns.heatmap(cm, annot=True, fmt='d',cmap = 'Blues')
     plt.ylabel('True Class')
@@ -101,6 +104,19 @@ def train_A1():
     heatmap.savefig('A1_heatmap', dpi = 400)
     plt.close()
     
+    
+    fpr, tpr, thersholds = roc
+    roc_auc = auc(fpr, tpr)
+    plt.plot(fpr, tpr, 'k--', label='ROC (area = {0:.2f})'.format(roc_auc), lw=2)       
+    plt.xlim([-0.05, 1.05])  # Set the limit of x label and y label to observe the graph properly
+    plt.ylim([-0.05, 1.05])
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title('ROC Curve')
+    plt.legend(loc="lower right")
+    plt.savefig('A1_ROC.jpg')
+    plt.close()
+        
     cm = cm.ravel()
     print('####### testing results ##########')
     print('1.test acc:{}\n2.test f1:{}\n3.confusion matrix: tn [{}], fp [{}], fn [{}], tp [{}]'.format(acc, f1, cm[0], cm[1], cm[2], cm[3]))

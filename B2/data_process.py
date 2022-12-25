@@ -5,55 +5,6 @@ import dlib
 from tqdm import tqdm
 from A2.lab2_lamdmarks import rect_to_bb
 
-detector = dlib.get_frontal_face_detector()
-predictor = dlib.shape_predictor('A2/shape_predictor_68_face_landmarks.dat')
-def shape_to_np(shape, dtype="int"):
-    # initialize the list of (x, y)-coordinates
-    coords = np.zeros((shape.num_parts, 2), dtype=dtype)
-    # loop over all facial landmarks and convert them
-    # to a 2-tuple of (x, y)-coordinates
-    for i in range(0, shape.num_parts):
-        coords[i] = (shape.part(i).x, shape.part(i).y)
-
-    # return the list of (x, y)-coordinates
-    return coords
-
-
-def run_dlib_shape(image):
-    # in this function we load the image, detect the landmarks of the face, and then return the image and the landmarks
-    # load the input image, resize it, and convert it to grayscale
-    # resized_image = image.astype('uint8')
-
-    gray = image.astype('uint8')
-
-    # detect faces in the grayscale image
-    rects = detector(gray, 1)
-    num_faces = len(rects)
-
-    if num_faces == 0:
-        return None
-
-    face_areas = np.zeros((1, num_faces))
-    face_shapes = np.zeros((136, num_faces), dtype=np.int64)
-
-    # loop over the face detections
-    for (i, rect) in enumerate(rects):
-        # determine the facial landmarks for the face region, then
-        # convert the facial landmark (x, y)-coordinates to a NumPy
-        # array
-        temp_shape = predictor(gray, rect)
-        temp_shape = shape_to_np(temp_shape)
-
-        # convert dlib's rectangle to a OpenCV-style bounding box
-        # [i.e., (x, y, w, h)],
-        #   (x, y, w, h) = face_utils.rect_to_bb(rect)
-        (x, y, w, h) = rect_to_bb(rect)
-        face_shapes[:, i] = np.reshape(temp_shape, [136])
-        face_areas[0, i] = w * h
-    # find largest face and keep
-    dlibout = np.reshape(np.transpose(face_shapes[:, np.argmax(face_areas)]), [136])
-
-    return dlibout
 
 def prepare_cartoon_data2(images_dir, labels_path, img_name_columns, labels_columns, img_size = 50, train=True):
     labels_file = open(labels_path, 'r')

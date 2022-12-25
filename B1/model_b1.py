@@ -1,13 +1,15 @@
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score, precision_recall_fscore_support
-from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import cross_val_score, GridSearchCV
 class Model_B1:
     """
     Random Forest is used for task B1
     """
     def __init__(self) -> None:
         self.model = RandomForestClassifier(n_estimators=50, n_jobs=-1)
+        self.parameters = {'n_estimators':(50,100,150,200)}
+        self.clf = GridSearchCV(RandomForestClassifier(), self.parameters, scoring='f1', n_jobs=-1)
     def train(self, x, y):
         """
         Train the model
@@ -19,7 +21,9 @@ class Model_B1:
         """
         # scores = cross_val_score(self.model, x, y, cv=10)
         # print('K-fold scores:', scores)
-        self.model = self.model.fit(x,y)
+        self.model = self.clf.fit(x,y)
+        print('best score:',self.clf.best_score_)
+        print('best parameters:', self.clf.best_params_)
     
     def test(self, x, y):
         """
