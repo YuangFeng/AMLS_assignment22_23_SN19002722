@@ -2,7 +2,7 @@
 from utils.train import train_A1, train_A2, train_B1, train_B2
         
 if __name__ == '__main__':    
-   #train_A1()
+   train_A1()
 
    #train_A2()
    """
@@ -11,7 +11,7 @@ if __name__ == '__main__':
       2.test f1:0.9197229013854931
       3.confusion matrix: tn [2160], fp [191], fn [203], tp [2257]
    """
-   train_B1()
+   # train_B1()
    """
       ####### testing results ##########
       1.test acc:0.9996

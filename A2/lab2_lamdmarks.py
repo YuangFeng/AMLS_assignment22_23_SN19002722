@@ -5,8 +5,8 @@ import dlib
 from tqdm import tqdm
 # import config
 
-detector = dlib.get_frontal_face_detector()
-predictor = dlib.shape_predictor('A2/shape_predictor_68_face_landmarks.dat')
+# detector = dlib.get_frontal_face_detector()
+# predictor = dlib.shape_predictor('A2/shape_predictor_68_face_landmarks.dat')
 
 
 # how to find frontal human faces in an image using 68 landmarks.  These are points on the face such as the corners of the mouth, along the eyebrows, on the eyes, and so forth.
