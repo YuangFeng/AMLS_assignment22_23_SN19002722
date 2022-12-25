@@ -9,7 +9,7 @@ class Model_B1:
     def __init__(self) -> None:
         self.model = RandomForestClassifier(n_estimators=50, n_jobs=-1)
         self.parameters = {'n_estimators':(50,100,150,200)}
-        self.clf = GridSearchCV(RandomForestClassifier(), self.parameters, scoring='f1', n_jobs=-1)
+        self.clf = GridSearchCV(RandomForestClassifier(), self.parameters, scoring='f1_micro')
     def train(self, x, y):
         """
         Train the model
