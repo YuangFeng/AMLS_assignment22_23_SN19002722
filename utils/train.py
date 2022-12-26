@@ -36,7 +36,7 @@ def evaluate(model, loader, device):
         acc = accuracy_score(label_list, pred_list)
         f1 = f1_score(label_list, pred_list, zero_division=0)
         cm = confusion_matrix(label_list, pred_list)
-        roc = roc_curve(label_list, pred_list, pos_label=1) #fpr, tpr, thersholds
+        roc = roc_curve(label_list, pred_list, pos_label=1) #fpr, tpr, thresholds
     return acc, f1, cm, roc
 
         
@@ -62,6 +62,7 @@ def train_A1():
     writer = SummaryWriter('./runs/A1/tensorboard')
     num_epoch = 40
     best_acc = 0.0
+
     for i in range(num_epoch):
         model.train()
         total_loss = 0.
@@ -74,38 +75,45 @@ def train_A1():
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
-        print("epoch:{}\t train loss:{}".format(i,
+        print("epoch:{}\t train loss:{}".format(i+1,
                                             total_loss/len(train_loader),
                                             ))
         writer.add_scalar("train/train_loss", total_loss/len(train_loader),i)
         
         acc, f1, cm, _ = evaluate(model, val_loader, device)
-        print("epoch:{}\tval accuracy:{}\tval f1:{}".format(i,
+
+        print("epoch:{}\tval accuracy:{}\tval f1:{}".format(i+1,
                                             acc,
                                             f1
                                             ))
         if acc> best_acc:
             best_acc = acc
             torch.save(model, 'A1/best_model.pth')
-            print('save model at epoch {}, best acc:{}'.format(i, best_acc))
+            print('save model at epoch {}, best val acc:{}, best val f1:{}'.format(i+1, best_acc, f1))
+            fig = sns.heatmap(cm, annot=True, fmt='d', cmap='Blues')
+            plt.ylabel('True Class')
+            plt.xlabel('Predicted Class')
+            heatmap = fig.get_figure()
+            heatmap.savefig('A1_heatmap_validation', dpi=400)
+            plt.close()
             
         writer.add_scalar("train/val_acc", acc,i)
         writer.add_scalar("train/val_F1", f1, i)
     writer.close()
-    
+
     print('training finished!')
+
     model = torch.load('A1/best_model.pth')
     acc, f1, cm, roc = evaluate(model, test_loader, device)
-    
+
     fig = sns.heatmap(cm, annot=True, fmt='d',cmap = 'Blues')
     plt.ylabel('True Class')
     plt.xlabel('Predicted Class')
-    heatmap = fig.get_figure()
-    heatmap.savefig('A1_heatmap', dpi = 400)
+    heatmap = fig.get_figure()#confusion matrix of testing dara
+    heatmap.savefig('A1_heatmap_test', dpi = 400)
     plt.close()
-    
-    
-    fpr, tpr, thersholds = roc
+
+    fpr, tpr, thresholds = roc
     roc_auc = auc(fpr, tpr)
     plt.plot(fpr, tpr, 'k--', label='ROC (area = {0:.2f})'.format(roc_auc), lw=2)       
     plt.xlim([-0.05, 1.05])  # Set the limit of x label and y label to observe the graph properly
@@ -114,7 +122,7 @@ def train_A1():
     plt.ylabel('True Positive Rate')
     plt.title('ROC Curve')
     plt.legend(loc="lower right")
-    plt.savefig('A1_ROC.jpg')
+    plt.savefig('A1_ROC.jpg')#ROC curve
     plt.close()
         
     cm = cm.ravel()

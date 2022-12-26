@@ -4,7 +4,7 @@ from sklearn.metrics import accuracy_score, precision_recall_fscore_support
 from sklearn.model_selection import cross_val_score,GridSearchCV
 class Model_B2:
     def __init__(self) -> None:
-        self.model = RandomForestClassifier(n_estimators=50, n_jobs=-1)
+        self.model = RandomForestClassifier(n_estimators=150, n_jobs=-1)
         self.parameters = {'n_estimators':(50,100,150,200)}
         self.clf = GridSearchCV(RandomForestClassifier(), self.parameters, scoring='f1_micro')
         
