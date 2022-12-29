@@ -28,7 +28,7 @@ class Model_B2:
         train_sizes, train_scores, test_scores = learning_curve(
             self.model, x, y, cv=3, n_jobs = -1, train_sizes=np.linspace(.1, 1.0, 5), scoring='accuracy'
         )
-        plot_learning_curve(train_sizes, train_scores, test_scores, 'B1_learning_curve')
+        plot_learning_curve(train_sizes, train_scores, test_scores, 'B2_learning_curve')
     
     def test(self, x, y):
         """
