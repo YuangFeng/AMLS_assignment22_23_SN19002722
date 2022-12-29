@@ -3,28 +3,30 @@ Hello😁!
 
 To run my code please download the zip folder first. Please add the whole dataset in to the folder before run main.py to test my code.
 
-The packages required and their using purposes are listed below:
+The packages required with their version are listed below:
 
-pytorch: To build the CNN model, data preparation and model parameters optimization
+dlib 19.24.0
 
-PIL: read image data
+matplotlib 3.6.2
 
-tqdm: progress checking when running the program
+numpy 1.22.3
 
-sklearn: implement SVM and RF models, evaluate model by import metrics and perform the grid search
+opencv_python 4.6.0.66
 
-tensorboardX: Record the learning curve
+pandas 1.5.1
 
-seaborn: Draw the confusion matrix
+Pillow 9.3.0
 
-matplotlib: Graph drawing
+scikit_learn 1.2.0
 
-numpy: Data/image processing and analysis
+seaborn 0.12.1
 
-dlib: extract the facial features of images
+tensorboardX 2.5.1
 
-opencv: Image pre-processing and processing
+torch 1.12.1
 
-os: merge file paths
+torchvision 0.13.1
+
+tqdm 4.64.1
 
 Python 3.8 (should be OK with version >=3.5)
