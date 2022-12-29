@@ -98,11 +98,7 @@ def prepare_celeba_feature_labels(images_dir, labels_path, img_name_colunms, lab
     all_features = []
     all_labels = []
     print('start extracting feature of images in ', images_dir)
-    i = 0
     for image_path in tqdm(image_paths):
-        i += 1
-        # if i> 100:
-        #     break
         img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
         img_name = image_path.split('/')[-1]
         features = run_dlib_shape(img)

@@ -3,7 +3,12 @@ from sklearn import svm
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import accuracy_score, f1_score, roc_curve, confusion_matrix, auc
 from matplotlib import pyplot as plt
-from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import cross_val_score, learning_curve
+import seaborn as sns
+import numpy as np
+from utils.comm import plot_learning_curve, plot_cm, plot_roc
+
+
 
 class Model_A2:
     """
@@ -11,7 +16,7 @@ class Model_A2:
     parameters: 
         search: bool, whether to use grid search, default:False
     """
-    def __init__(self, search=False) -> None:
+    def __init__(self, search=True) -> None:
         self.search = search
         self.model = svm.SVC(kernel = 'rbf', C=10000, probability=True)
         # self.model = RandomForestClassifier(n_estimators=10, n_jobs=-1)
@@ -39,6 +44,12 @@ class Model_A2:
             # print('k-fold scores:', scores)
             self.model = self.model.fit(x, y)
             
+        train_sizes, train_scores, test_scores = learning_curve(
+            self.model, x, y, cv=3, n_jobs = -1, train_sizes=np.linspace(.1, 1.0, 5), scoring='accuracy'
+        )
+        plot_learning_curve(train_sizes, train_scores, test_scores, 'A2_learning_curve')
+        
+            
     def test(self, x, y):
         """
         Test model with given test data
@@ -58,25 +69,10 @@ class Model_A2:
         f1 = f1_score(y, pred)
         roc = roc_curve(y, pred_score, pos_label=1) #fpr, tpr, thersholds
         cm = confusion_matrix(y, pred)
-        self.plot_roc(roc)
+        plot_roc(roc, 'A2_ROC.jpg')
+        plot_cm(cm, 'A2_heatmap.png')
         return acc, f1, roc, cm
     
-    def plot_roc(self, roc):
-        """
-        Plot and save the ROC curve
-        Input parameters: 
-            roc: fpr, tpr, thersholds
-        Returns:
-            None
-        """
-        fpr, tpr, thersholds = roc
-        roc_auc = auc(fpr, tpr)
-        plt.plot(fpr, tpr, 'k--', label='ROC (area = {0:.2f})'.format(roc_auc), lw=2)       
-        plt.xlim([-0.05, 1.05])  # Set the limit of x label and y label to observe the graph properly
-        plt.ylim([-0.05, 1.05])
-        plt.xlabel('False Positive Rate')
-        plt.ylabel('True Positive Rate')
-        plt.title('ROC Curve')
-        plt.legend(loc="lower right")
-        plt.savefig('A2_ROC.jpg')
-        plt.close()
+
+        
+

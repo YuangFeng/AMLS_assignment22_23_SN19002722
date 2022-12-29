@@ -15,11 +15,10 @@ from sklearn.metrics import accuracy_score, f1_score, confusion_matrix, auc, roc
 from tqdm import tqdm
 import config
 from tensorboardX import SummaryWriter
-import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
-
-
+import seaborn as sns
+from utils.comm import plot_learning_curve, plot_cm, plot_roc
 
 def evaluate(model, loader, device):
     label_list = []
@@ -39,7 +38,8 @@ def evaluate(model, loader, device):
         roc = roc_curve(label_list, pred_list, pos_label=1) #fpr, tpr, thresholds
     return acc, f1, cm, roc
 
-        
+
+           
 def train_A1():
     print('#################### Run task A1 ###################')
     data = CelebaDataSet(config.CELEBA_IMG, config.CELEBA_LABELS)
@@ -90,12 +90,7 @@ def train_A1():
             best_acc = acc
             torch.save(model, 'A1/best_model.pth')
             print('save model at epoch {}, best val acc:{}, best val f1:{}'.format(i+1, best_acc, f1))
-            fig = sns.heatmap(cm, annot=True, fmt='d', cmap='Blues')
-            plt.ylabel('True Class')
-            plt.xlabel('Predicted Class')
-            heatmap = fig.get_figure()
-            heatmap.savefig('A1_heatmap_validation', dpi=400)
-            plt.close()
+            plot_cm(cm, 'A1_heatmap_validation')
             
         writer.add_scalar("train/val_acc", acc,i)
         writer.add_scalar("train/val_F1", f1, i)
@@ -106,12 +101,7 @@ def train_A1():
     model = torch.load('A1/best_model.pth')
     acc, f1, cm, roc = evaluate(model, test_loader, device)
 
-    fig = sns.heatmap(cm, annot=True, fmt='d',cmap = 'Blues')
-    plt.ylabel('True Class')
-    plt.xlabel('Predicted Class')
-    heatmap = fig.get_figure()#confusion matrix of testing dara
-    heatmap.savefig('A1_heatmap_test', dpi = 400)
-    plt.close()
+    plot_cm(cm, 'A1_heatmap_test')
 
     fpr, tpr, thresholds = roc
     roc_auc = auc(fpr, tpr)
@@ -142,14 +132,6 @@ def train_A2():
     model.train(train_x, train_y)
     print('end training.....')
     acc, f1, roc_data, cm = model.test(test_x, test_y)
-    
-    fig = sns.heatmap(cm, annot=True, fmt='d',cmap = 'Blues')
-    plt.ylabel('True Class')
-    plt.xlabel('Predicted Class')
-    heatmap = fig.get_figure()
-    heatmap.savefig('A2_heatmap', dpi = 400)
-    plt.close()
-    
     cm = cm.ravel()
     print('####### testing results ##########')
     print('1.test acc:{}\n2.test f1:{}\n3.confusion matrix: tn [{}], fp [{}], fn [{}], tp [{}]'.format(acc, f1, cm[0], cm[1], cm[2], cm[3]))

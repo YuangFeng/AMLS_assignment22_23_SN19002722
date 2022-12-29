@@ -1,7 +1,9 @@
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score, precision_recall_fscore_support
-from sklearn.model_selection import cross_val_score, GridSearchCV
+from sklearn.model_selection import cross_val_score, GridSearchCV, learning_curve
+from utils.comm import plot_learning_curve, plot_cm, plot_roc
+import numpy as np
 class Model_B1:
     """
     Random Forest is used for task B1
@@ -24,6 +26,12 @@ class Model_B1:
         self.model = self.clf.fit(x,y)
         print('best score:',self.clf.best_score_)
         print('best parameters:', self.clf.best_params_)
+        
+        train_sizes, train_scores, test_scores = learning_curve(
+            self.model, x, y, cv=3, n_jobs = -1, train_sizes=np.linspace(.1, 1.0, 5), scoring='accuracy'
+        )
+        plot_learning_curve(train_sizes, train_scores, test_scores, 'B1_learning_curve')
+        
     
     def test(self, x, y):
         """

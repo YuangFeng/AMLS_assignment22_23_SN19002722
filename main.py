@@ -2,14 +2,14 @@
 from utils.train import train_A1, train_A2, train_B1, train_B2
         
 if __name__ == '__main__':    
-   train_A1()
+   # train_A1()
    """
    ##### A1 results(40 epochs)#######
    1.test acc:0.953
    2.test f1:0.9533267130089375
    3.confusion matrix: tn [473], fp [27], fn [20], tp [480]
    """
-   #train_A2()
+   # train_A2()
    """
       ##### A2 results #######
       Result from grid search:
@@ -28,7 +28,7 @@ if __name__ == '__main__':
       1.test acc:1
       2.test f1:[1.  1.  1.       1.       1.      ]
    """
-   #train_B2()
+   train_B2()
    """
       ##### B2 results #########
       training set:
