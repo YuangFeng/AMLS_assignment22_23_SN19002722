@@ -11,7 +11,7 @@ class Model_B2:
         self.model = RandomForestClassifier(n_estimators=150, n_jobs=-1)
         if self.search:
             self.parameters = {'n_estimators':(50,100,150,200)}
-            self.clf = GridSearchCV(RandomForestClassifier(), self.parameters, scoring='f1_micro')
+            self.clf = GridSearchCV(RandomForestClassifier(), self.parameters, scoring='f1_micro',cv = 5)
         
     def train(self, x, y):
         """

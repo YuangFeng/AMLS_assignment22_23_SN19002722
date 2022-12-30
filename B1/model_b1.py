@@ -13,7 +13,7 @@ class Model_B1:
         self.model = RandomForestClassifier(n_estimators=50, n_jobs=-1)
         if self.search:
             self.parameters = {'n_estimators':(50,100,150,200)}
-            self.clf = GridSearchCV(RandomForestClassifier(), self.parameters, scoring='f1_micro')
+            self.clf = GridSearchCV(RandomForestClassifier(), self.parameters, scoring='f1_micro',cv = 5)
             
     def train(self, x, y):
         """
@@ -36,7 +36,7 @@ class Model_B1:
             print('k-fold scores:', scores)
         
         train_sizes, train_scores, test_scores = learning_curve(
-            self.model, x, y, cv=3, n_jobs = -1, train_sizes=np.linspace(.1, 1.0, 5), scoring='accuracy'
+            self.model, x, y, cv=3, n_jobs = -1, train_sizes=np.linspace(.1, 1.0, 5), scoring='f1_micro'
         )
         plot_learning_curve(train_sizes, train_scores, test_scores, 'B1_learning_curve')
         

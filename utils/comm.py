@@ -11,7 +11,7 @@ def plot_learning_curve(train_sizes, train_scores, test_scores, save_file):
     plt.plot(train_sizes, train_scores_mean, 'o-', color='r', label='train score')
     plt.plot(train_sizes, test_scores_mean, 'o-', color = 'b', label = 'test score')
     plt.xlabel('Traning examples')
-    plt.ylabel('Loss')
+    plt.ylabel('F1')
     plt.legend(loc='best')
     plt.savefig(save_file)
     plt.close()
