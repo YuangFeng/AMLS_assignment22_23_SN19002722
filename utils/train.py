@@ -48,7 +48,7 @@ def train_A1():
     print('train data:', train_length)
     print('val data:',  len(data)-train_length)
     print('test data:', len(test_data))
-    train_data, val_data = random_split(data, lengths=[train_length, len(data)-train_length], generator=torch.Generator().manual_seed(0))
+    train_data, val_data = random_split(data, lengths=[train_length, len(data)-train_length], generator=torch.Generator().manual_seed(0)) #split training and validation data
     train_loader = DataLoader(train_data, batch_size=16,shuffle=True, num_workers=8) 
     val_loader = DataLoader(val_data, batch_size=1, shuffle=False, num_workers=3)
     test_loader = DataLoader(test_data,  batch_size=1, shuffle=False, num_workers=3)
@@ -90,7 +90,7 @@ def train_A1():
             best_acc = acc
             torch.save(model, 'A1/best_model.pth')
             print('save model at epoch {}, best val acc:{}, best val f1:{}'.format(i+1, best_acc, f1))
-            plot_cm(cm, 'A1_heatmap_validation')
+            plot_cm(cm, 'A1_heatmap_validation') #confusion matrix
             
         writer.add_scalar("train/val_acc", acc,i)
         writer.add_scalar("train/val_F1", f1, i)
@@ -122,11 +122,11 @@ def train_A1():
 def train_A2():
     print('#################### Run task A2 ###################')
     train_x, train_y =  prepare_celeba_feature_labels(config.CELEBA_IMG, config.CELEBA_LABELS, img_name_colunms=1, labels_colunms=3)
-    test_x, test_y = prepare_celeba_feature_labels(config.CELEBA_IMG_TEST, config.CELEBA_TEST_LABELS, img_name_colunms=1, labels_colunms=3)
+    test_x, test_y = prepare_celeba_feature_labels(config.CELEBA_IMG_TEST, config.CELEBA_TEST_LABELS, img_name_colunms=1, labels_colunms=3) #load data
     
     print('train data:', len(train_x))
     print('test_data:', len(test_x))
-    model = Model_A2(False)
+    model = Model_A2(False) # can adjust here to use grid search or not
     
     print('start training.....')
     model.train(train_x, train_y)
@@ -140,7 +140,7 @@ def train_A2():
 def train_B1():
     print('#################### Run task B1 ###################')
     train_x, train_y =  prepare_cartoon_data(config.CARTOON_IMG, config.CARTOON_LABELS, img_name_columns=3, labels_columns=2)
-    test_x, test_y = prepare_cartoon_data(config.CARTOON_IMG_TEST, config.CARTOON_TEST_LABELS, img_name_columns=3, labels_columns=2)
+    test_x, test_y = prepare_cartoon_data(config.CARTOON_IMG_TEST, config.CARTOON_TEST_LABELS, img_name_columns=3, labels_columns=2) #load data
     print('start training.....')
     model = Model_B1(False)
     model.train(train_x, train_y)
@@ -153,7 +153,7 @@ def train_B1():
 def train_B2():
     print('#################### Run task B2 ###################')
     train_x, train_y =  prepare_cartoon_data2(config.CARTOON_IMG, config.CARTOON_LABELS, img_name_columns=3, labels_columns=1, train=True)
-    test_x, test_y = prepare_cartoon_data2(config.CARTOON_IMG_TEST, config.CARTOON_TEST_LABELS, img_name_columns=3, labels_columns=1, train = True)
+    test_x, test_y = prepare_cartoon_data2(config.CARTOON_IMG_TEST, config.CARTOON_TEST_LABELS, img_name_columns=3, labels_columns=1, train = True) #load data
     print('start training.....')
     model = Model_B2(False)
     model.train(train_x, train_y)

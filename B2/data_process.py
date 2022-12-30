@@ -39,7 +39,7 @@ def prepare_cartoon_data2(images_dir, labels_path, img_name_columns, labels_colu
         # if i> 100:
         #     break
         img = cv2.imread(image_path)
-        img = cv2.resize(src=img, dsize=(img_size, img_size),  interpolation=cv2.INTER_LANCZOS4)
+        img = cv2.resize(src=img, dsize=(img_size, img_size),  interpolation=cv2.INTER_LANCZOS4) #reduce image size
         img_name = image_path.split('/')[-1]
         
 

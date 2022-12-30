@@ -4,7 +4,7 @@ import numpy as np
 import seaborn as sns
 
 
-def plot_learning_curve(train_sizes, train_scores, test_scores, save_file):
+def plot_learning_curve(train_sizes, train_scores, test_scores, save_file):  #the commonly used function to plot learning curve
     train_scores_mean = np.mean(train_scores, axis=1)
     test_scores_mean = np.mean(test_scores, axis=1)
     
@@ -16,7 +16,7 @@ def plot_learning_curve(train_sizes, train_scores, test_scores, save_file):
     plt.savefig(save_file)
     plt.close()
 
-def plot_cm(cm, save_file):
+def plot_cm(cm, save_file):  #the commonly used function to draw confusion matrix
     fig = sns.heatmap(cm, annot=True, fmt='d',cmap = 'Blues')
     plt.ylabel('True Class')
     plt.xlabel('Predicted Class')
