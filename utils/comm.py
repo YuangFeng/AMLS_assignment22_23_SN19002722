@@ -8,10 +8,10 @@ def plot_learning_curve(train_sizes, train_scores, test_scores, save_file):
     train_scores_mean = np.mean(train_scores, axis=1)
     test_scores_mean = np.mean(test_scores, axis=1)
     
-    plt.plot(train_sizes, train_scores_mean, 'o-', color='r', label='train score')
-    plt.plot(train_sizes, test_scores_mean, 'o-', color = 'b', label = 'test score')
+    plt.plot(train_sizes, train_scores_mean, 'o-', color='r', label='train')
+    plt.plot(train_sizes, test_scores_mean, 'o-', color = 'b', label = 'validation')
     plt.xlabel('Traning examples')
-    plt.ylabel('F1')
+    plt.ylabel('Accuracy')
     plt.legend(loc='best')
     plt.savefig(save_file)
     plt.close()

@@ -30,11 +30,11 @@ class Model_B2:
             print('best parameters:', self.clf.best_params_)
         else:
             self.model = self.model.fit(x, y)
-            scores = cross_val_score(self.model, x, y, cv = 5, scoring = 'f1_micro')
-            print('k-fold scores:', scores)
+            scores = cross_val_score(self.model, x, y, cv = 5, scoring = 'accuracy')
+            print('k-fold scores:', np.mean(scores))
             
         train_sizes, train_scores, test_scores = learning_curve(
-            self.model, x, y, cv=3, n_jobs = -1, train_sizes=np.linspace(.1, 1.0, 5), scoring='accuracy'
+            self.model, x, y, cv = 5, n_jobs = -1, train_sizes=np.linspace(.1, 1.0, 15), scoring='accuracy'
         )
         plot_learning_curve(train_sizes, train_scores, test_scores, 'B2_learning_curve')
     
