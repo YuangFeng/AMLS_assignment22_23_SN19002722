@@ -6,10 +6,12 @@ import numpy as np
 from utils.comm import plot_learning_curve, plot_cm, plot_roc
 
 class Model_B2:
-    def __init__(self) -> None:
+    def __init__(self, search) -> None:
+        self.search = search
         self.model = RandomForestClassifier(n_estimators=150, n_jobs=-1)
-        self.parameters = {'n_estimators':(50,100,150,200)}
-        self.clf = GridSearchCV(RandomForestClassifier(), self.parameters, scoring='f1_micro')
+        if self.search:
+            self.parameters = {'n_estimators':(50,100,150,200)}
+            self.clf = GridSearchCV(RandomForestClassifier(), self.parameters, scoring='f1_micro')
         
     def train(self, x, y):
         """
@@ -22,9 +24,15 @@ class Model_B2:
         """
         # scores = cross_val_score(self.model, x, y, cv=10)
         # print('K-fold scores:', scores)
-        self.model = self.clf.fit(x,y)
-        print('best score:',self.clf.best_score_)
-        print('best parameters:', self.clf.best_params_)
+        if self.search:
+            self.model = self.clf.fit(x,y)
+            print('best score:',self.clf.best_score_)
+            print('best parameters:', self.clf.best_params_)
+        else:
+            self.model = self.model.fit(x, y)
+            scores = cross_val_score(self.model, x, y, cv = 5, scoring = 'f1_micro')
+            print('k-fold scores:', scores)
+            
         train_sizes, train_scores, test_scores = learning_curve(
             self.model, x, y, cv=3, n_jobs = -1, train_sizes=np.linspace(.1, 1.0, 5), scoring='accuracy'
         )

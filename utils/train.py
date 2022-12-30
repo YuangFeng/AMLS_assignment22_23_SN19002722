@@ -126,7 +126,7 @@ def train_A2():
     
     print('train data:', len(train_x))
     print('test_data:', len(test_x))
-    model = Model_A2()
+    model = Model_A2(False)
     
     print('start training.....')
     model.train(train_x, train_y)
@@ -142,7 +142,7 @@ def train_B1():
     train_x, train_y =  prepare_cartoon_data(config.CARTOON_IMG, config.CARTOON_LABELS, img_name_columns=3, labels_columns=2)
     test_x, test_y = prepare_cartoon_data(config.CARTOON_IMG_TEST, config.CARTOON_TEST_LABELS, img_name_columns=3, labels_columns=2)
     print('start training.....')
-    model = Model_B1()
+    model = Model_B1(False)
     model.train(train_x, train_y)
     print('end training.....')
     print('####### testing results ##########')
@@ -155,7 +155,7 @@ def train_B2():
     train_x, train_y =  prepare_cartoon_data2(config.CARTOON_IMG, config.CARTOON_LABELS, img_name_columns=3, labels_columns=1, train=True)
     test_x, test_y = prepare_cartoon_data2(config.CARTOON_IMG_TEST, config.CARTOON_TEST_LABELS, img_name_columns=3, labels_columns=1, train = True)
     print('start training.....')
-    model = Model_B2()
+    model = Model_B2(False)
     model.train(train_x, train_y)
     print('end training.....')
     print('####### testing results ##########')

@@ -9,7 +9,7 @@ if __name__ == '__main__':
    2.test f1:0.9533267130089375
    3.confusion matrix: tn [473], fp [27], fn [20], tp [480]
    """
-   # train_A2()
+   train_A2()
    """
       ##### A2 results #######
       Result from grid search:
@@ -19,7 +19,7 @@ if __name__ == '__main__':
       2.test f1:0.906187624750499
       3.confusion matrix: tn [422], fp [50], fn [44], tp [454]
    """
-   # train_B1()
+   train_B1()
    """
       ####### B1 results ##########
       Result from grid search:

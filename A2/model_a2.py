@@ -16,13 +16,13 @@ class Model_A2:
     parameters: 
         search: bool, whether to use grid search, default:False
     """
-    def __init__(self, search=True) -> None:
+    def __init__(self, search=True):
         self.search = search
         self.model = svm.SVC(kernel = 'rbf', C=10000, probability=True)
         # self.model = RandomForestClassifier(n_estimators=10, n_jobs=-1)
         if self.search:
             self.parameters = {'kernel':('rbf','linear'),'C':(10000,20000,30000)}
-            self.clf = GridSearchCV(svm.SVC(probability=True), self.parameters, scoring='f1', n_jobs=-1)
+            self.clf = GridSearchCV(svm.SVC(probability=True), self.parameters, scoring='f1', n_jobs=-1, cv = 5)
         
     
     def train(self, x, y):
@@ -40,9 +40,9 @@ class Model_A2:
             print('best score:',self.clf.best_score_)
             print('best parameters:', self.clf.best_params_)
         else:
-            # scores = cross_val_score(self.model, x, y, cv = 10, scoring = 'f1')
-            # print('k-fold scores:', scores)
             self.model = self.model.fit(x, y)
+            scores = cross_val_score(self.model, x, y, cv = 5, scoring = 'accuracy')
+            print('k-fold scores:', scores)
             
         train_sizes, train_scores, test_scores = learning_curve(
             self.model, x, y, cv=3, n_jobs = -1, train_sizes=np.linspace(.1, 1.0, 5), scoring='accuracy'
