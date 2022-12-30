@@ -1,7 +1,7 @@
 # AMLS_assignment22_23_SN19002722
 Hello😁!
 
-To run my code please download the zip folder first. Please add the whole dataset in to the folder before run main.py to test my code. The main.py code is located in utils folder.
+To run my code please download the zip folder first. Please add the whole dataset in to the folder before run main.py to test my code. 
 
 The packages required with their version are listed below:
 
